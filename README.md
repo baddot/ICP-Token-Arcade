@@ -11,6 +11,8 @@
 
 This project demonstrates how blockchain-based gaming works with **smart contracts** on the ICP, featuring seamless communication between frontend and backend.
 
+Demo Link : https://nb3ok-yiaaa-aaaal-qna5a-cai.icp0.io
+
 ---
 
 ## Project Structure
@@ -54,7 +56,7 @@ This project demonstrates how blockchain-based gaming works with **smart contrac
 
 3. Clone the repository:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/baddot/ICP-Token-Arcade.git
    cd token-arcade-development
    ```
 
