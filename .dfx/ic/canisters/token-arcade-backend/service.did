@@ -1,0 +1,7 @@
+service : {
+  getScores: () -> (vec record {
+                          text;
+                          nat;
+                        });
+  updateScore: (text, nat) -> ();
+}

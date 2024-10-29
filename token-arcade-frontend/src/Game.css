@@ -1,0 +1,84 @@
+/* Style for the game canvas */
+canvas {
+  display: block;
+  margin: 0 auto;
+  background-color: black;
+}
+
+/* Game Container (Optional: Wrapping everything) */
+.game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: black;
+}
+
+.game-over-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.game-over-screen button {
+  padding: 10px 20px;
+  background-color: red;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* Game Over Screen Styling */
+/*#game-over-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}*/
+
+#game-over-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+#game-over-screen p {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+#game-over-screen button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#game-over-screen button:hover {
+  background-color: #cc0000;
+}
+
+/* Optional Styling for Background */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
+}
