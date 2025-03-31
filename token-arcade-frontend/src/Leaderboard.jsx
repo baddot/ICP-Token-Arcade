@@ -44,11 +44,27 @@ function Leaderboard() {
   useEffect(() => {
     const loadScores = async () => {
       const result = await fetchLeaderboard();
-      const sorted = result.sort((a, b) => b[1] - a[1]); // Highest scores first
+
+      const sorted = result
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 50);
+
       setScores(sorted);
     };
     loadScores();
   }, []);
+
+
+
+  // useEffect(() => {
+  //   const loadScores = async () => {
+  //     const result = await fetchLeaderboard();
+  //     // const sorted = result.sort((a, b) => b[1] - a[1]); // Highest scores first
+  //     const sorted = result.sort((a, b) => Number(b[1]) - Number(a[1])); 
+  //     setScores(sorted);
+  //   };
+  //   loadScores();
+  // }, []);
 
   return (
     <div className="leaderboard-container">

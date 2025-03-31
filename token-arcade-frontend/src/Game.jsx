@@ -99,15 +99,38 @@ function Game() {
           y + height > obstacle.y
         ) {
           setGameOver(true); // End game on collision
-          // setScore((prevScore) => prevScore + myscore);
-          const finalScore = prevScore + myscore;
-          setScore(finalScore);
 
-          endGameAndSubmitScore(finalScore);
+          setScore((prevScore) => {
+            const finalScore = prevScore + myscore;
+
+            endGameAndSubmitScore(finalScore); // Submit the correct final score
+            return finalScore;  // Update the React state correctly
+          });
+
           gameRunning.current = false; // Stop the game loop
         }
       });
     };
+
+    // const checkCollision = () => {
+    //   obstacles.current.forEach(obstacle => {
+    //     const { x, y, width, height } = playerRef.current;
+    //     if (
+    //       x < obstacle.x + obstacle.width &&
+    //       x + width > obstacle.x &&
+    //       y < obstacle.y + obstacle.height &&
+    //       y + height > obstacle.y
+    //     ) {
+    //       setGameOver(true); // End game on collision
+    //       // setScore((prevScore) => prevScore + myscore);
+    //       const finalScore = prevScore + myscore;
+    //       setScore(finalScore);
+
+    //       endGameAndSubmitScore(finalScore);
+    //       gameRunning.current = false; // Stop the game loop
+    //     }
+    //   });
+    // };
 
 
     const updatePlayerPosition = () => {
