@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { fetchLeaderboard } from './utils/icpService'; // Adjust path if needed
 import './Leaderboard.css';
 
 function Leaderboard() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [scores, setScores] = useState([]); // ✅ State for leaderboard
+  const navigate = useNavigate();
+
   const slides = [
     'assets/banner1.webp',
     'assets/banner2.webp',
@@ -10,9 +15,7 @@ function Leaderboard() {
   ];
 
   const startGame = () => {
-    const iframe = document.getElementById('gameIframe');
-    iframe.src = '/game';
-    iframe.style.display = 'block';
+    navigate("/game");
   };
 
   const endGame = () => {
@@ -34,7 +37,17 @@ function Leaderboard() {
   // Automatically change slides every 3 seconds
   useEffect(() => {
     const interval = setInterval(nextSlide, 3000);
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  // ✅ Fetch leaderboard from canister
+  useEffect(() => {
+    const loadScores = async () => {
+      const result = await fetchLeaderboard();
+      const sorted = result.sort((a, b) => b[1] - a[1]); // Highest scores first
+      setScores(sorted);
+    };
+    loadScores();
   }, []);
 
   return (
@@ -54,8 +67,6 @@ function Leaderboard() {
         </div>
 
         <button className="gmee-button">Check High Scores</button>
-
-
       </div>
 
       <div className="slider">
@@ -77,14 +88,20 @@ function Leaderboard() {
         <button onClick={startGame}>Play Now</button>
       </div>
 
+      {/* ✅ Dynamic leaderboard from canister */}
       <ul className="leaderboard-list">
-        <li className="leaderboard-item">Player 1 - 1000 Points</li>
-        <li className="leaderboard-item">Player 2 - 800 Points</li>
-        <li className="leaderboard-item">Player 3 - 700 Points</li>
+        {scores.length === 0 ? (
+          <li className="leaderboard-item">Loading scores...</li>
+        ) : (
+          scores.map(([name, score], index) => (
+            <li key={index} className="leaderboard-item">
+              #{index + 1} {name} - {score} Points
+            </li>
+          ))
+        )}
       </ul>
 
       <iframe id="gameIframe" className="game-iframe" title="Game Iframe"></iframe>
-      
     </div>
   );
 }

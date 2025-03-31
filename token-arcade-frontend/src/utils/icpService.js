@@ -1,21 +1,52 @@
 import { Actor, HttpAgent } from "@dfinity/agent";
-import { idlFactory } from "./canister_idl"; // Import your canister IDL
+//import { idlFactory, canisterId } from "../declarations/token-arcade-backend"; // ✅ Correct path & name
+//import { canisterId as backendCanisterId } from "../declarations/token-arcade-backend";
 
-const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai"; // Replace with your canister ID
+import { idlFactory } from "../declarations/token-arcade-backend"; // only import idlFactory
 
-// Initialize actor to interact with the canister
-export const createActor = (identity) => {
-  const agent = new HttpAgent({ identity });
-  return Actor.createActor(idlFactory, { agent, canisterId });
+
+
+const canisterId = "niyfw-oaaaa-aaaal-qna4q-cai"; 
+
+// Optional: use anonymous actor for read-only calls
+const createAnonymousActor = () => {
+  const agent = new HttpAgent();
+  return Actor.createActor(idlFactory, { agent, canisterId }); // ✅ FIXED
 };
 
-// Submit score to the canister
+// Create an authenticated actor
+export const createActor = (identity) => {
+  const agent = new HttpAgent({ identity });
+  return Actor.createActor(idlFactory, { agent, canisterId }); // ✅ FIXED
+};
+
+// Submit score with identity
 export const submitScoreToICP = async (identity, score) => {
   const actor = createActor(identity);
+  const name = identity.getPrincipal().toText();
+
   try {
-    const result = await actor.updateScore(score);
-    console.log("Score submitted:", result);
+    await actor.updateScore(name, score);
+    console.log("✅ Score submitted:", name, score);
   } catch (error) {
-    console.error("Failed to submit score:", error);
+    console.error("❌ Failed to submit score:", error);
+  }
+};
+
+// Fetch leaderboard
+export const fetchLeaderboard = async () => {
+  try {
+    const actor = createAnonymousActor();
+    const raw = await actor.getScores();
+    console.log("📦 Raw scores from canister:", raw);
+
+
+    // Convert raw records to [name, score] arrays
+    const cleaned = raw.map((entry) => [entry?.[0] ?? "Unknown", entry?.[1] ?? 0]);
+
+    return cleaned;
+  } catch (error) {
+    console.error("❌ Failed to fetch leaderboard:", error);
+    return [];
   }
 };

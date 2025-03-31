@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Game.css'; // Optional: Add styling
 
 import { submitScoreToICP } from "./utils/icpService"; // Adjust path as necessary
+import { AuthClient } from "@dfinity/auth-client";
+
 
 function Game() {
   const canvasRef = useRef(null); // Canvas reference
@@ -21,20 +23,20 @@ function Game() {
     setScore((prevScore) => prevScore + 1); // Correct use of setScore
   };
 
-  const endGameAndSubmitScore = async () => {
+  const endGameAndSubmitScore = async (finalScore) => {
       setGameOver(true); // End the game
 
       try {
-        const authClient = await AuthClient.create();
-        if (await authClient.isAuthenticated()) {
-          const identity = authClient.getIdentity();
-          await submitScoreToICP(identity, score); // Submit the score
-        } else {
-          console.error("User not authenticated. Cannot submit score.");
+          const authClient = await AuthClient.create();
+          if (await authClient.isAuthenticated()) {
+            const identity = authClient.getIdentity();
+            await submitScoreToICP(identity, finalScore); // ✅ finalScore = your state
+          } else {
+            console.warn("User not logged in");
+          }
+        } catch (err) {
+          console.error("❌ Error submitting score:", err);
         }
-      } catch (error) {
-        console.error("Error submitting score:", error);
-      }
     };
 
   useEffect(() => {
@@ -97,8 +99,11 @@ function Game() {
           y + height > obstacle.y
         ) {
           setGameOver(true); // End game on collision
-          setScore((prevScore) => prevScore + myscore);
-          endGameAndSubmitScore();
+          // setScore((prevScore) => prevScore + myscore);
+          const finalScore = prevScore + myscore;
+          setScore(finalScore);
+
+          endGameAndSubmitScore(finalScore);
           gameRunning.current = false; // Stop the game loop
         }
       });
