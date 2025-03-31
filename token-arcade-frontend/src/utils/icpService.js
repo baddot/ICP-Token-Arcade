@@ -53,19 +53,3 @@ export const fetchLeaderboard = async () => {
   }
 };
 
-// export const fetchLeaderboard = async () => {
-//   try {
-//     const actor = createAnonymousActor();
-//     const raw = await actor.getScores();
-//     console.log("📦 Raw scores from canister:", raw);
-
-
-//     // Convert raw records to [name, score] arrays
-//     const cleaned = raw.map((entry) => [entry?.[0] ?? "Unknown", entry?.[1] ?? 0]);
-
-//     return cleaned;
-//   } catch (error) {
-//     console.error("❌ Failed to fetch leaderboard:", error);
-//     return [];
-//   }
-// };
